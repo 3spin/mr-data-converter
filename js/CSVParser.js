@@ -16,7 +16,7 @@ var CSVParser = {
   //---------------------------------------
 
   isNumber: function(string) {
-    if( (string == null) || isNaN( new Number(string) ) ) {
+    if( (string === null) || isNaN( new Number(string) ) ) {
       return false;
     }
     return true;
@@ -47,13 +47,15 @@ var CSVParser = {
     //set delimiter
     var columnDelimiter = ",";
     if (numTabs > numCommas) {
-      columnDelimiter = "\t"
-    };
+      columnDelimiter = "\t";
+    }
 
     if (delimiterType === "comma") {
-      columnDelimiter = ","
+      columnDelimiter = ",";
+    } else if (delimiterType === "semicolon") {
+      columnDelimiter = ";";
     } else if (delimiterType === "tab") {
-      columnDelimiter = "\t"
+      columnDelimiter = "\t";
     }
 
 
@@ -79,8 +81,8 @@ var CSVParser = {
         dataArray[i][j] = dataArray[i][j].replace("\t", "\\t");
         dataArray[i][j] = dataArray[i][j].replace("\n", "\\n");
         dataArray[i][j] = dataArray[i][j].replace("\r", "\\r");
-      };
-    };
+      }
+    }
 
 
     var headerNames = [];
@@ -99,7 +101,7 @@ var CSVParser = {
       for (var i=0; i < numColumns; i++) {
         headerNames.push("val"+String(i));
         headerTypes.push("");
-      };
+      }
 
     }
 
@@ -107,19 +109,21 @@ var CSVParser = {
     if (upcaseHeaders) {
       for (var i = headerNames.length - 1; i >= 0; i--){
         headerNames[i] = headerNames[i].toUpperCase();
-      };
-    };
+      }
+    }
     if (downcaseHeaders) {
       for (var i = headerNames.length - 1; i >= 0; i--){
         headerNames[i] = headerNames[i].toLowerCase();
-      };
-    };
+      }
+    }
 
     //test all the rows for proper number of columns.
     for (var i=0; i < dataArray.length; i++) {
       var numValues = dataArray[i].length;
-      if (numValues != numColumns) {this.log("Error parsing row "+String(i)+". Wrong number of columns.")};
-    };
+      if (numValues != numColumns) {
+          this.log("Error parsing row "+String(i)+". Wrong number of columns.");
+      }
+    }
 
     //test columns for number data type
     var numRowsToTest = dataArray.length;
@@ -134,23 +138,23 @@ var CSVParser = {
             dataArray[r][i] = dataArray[r][i].replace(",", ".");
           }
           if (CSVParser.isNumber(dataArray[r][i])) {
-            numInts++
+            numInts++;
             if (String(dataArray[r][i]).indexOf(".") > 0) {
-              numFloats++
+              numFloats++;
             }
-          };
-        };
+          }
+        }
 
-      };
+      }
 
       if ((numInts / numRowsToTest) > threshold){
         if (numFloats > 0) {
-          headerTypes[i] = "float"
+          headerTypes[i] = "float";
         } else {
-          headerTypes[i] = "int"
+          headerTypes[i] = "int";
         }
       } else {
-        headerTypes[i] = "string"
+        headerTypes[i] = "string";
       }
     }
 
@@ -158,7 +162,7 @@ var CSVParser = {
 
 
 
-    return {'dataGrid':dataArray, 'headerNames':headerNames, 'headerTypes':headerTypes, 'errors':this.getLog()}
+    return {'dataGrid':dataArray, 'headerNames':headerNames, 'headerTypes':headerTypes, 'errors':this.getLog()};
 
   },
 
@@ -181,9 +185,9 @@ var CSVParser = {
     if (this.errorLog.length > 0) {
       for (var i=0; i < this.errorLog.length; i++) {
         out += ("!!"+this.errorLog[i] + "!!\n");
-      };
-      out += "\n"
-    };
+      }
+      out += "\n";
+    }
 
     return out;
   },
@@ -282,4 +286,4 @@ var CSVParser = {
 
 
 
-}
+};
